@@ -11,7 +11,7 @@ model User {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String // Plain text as requested
-  role     String @default("ADMIN")
+  role     String @default("USER")
 }
 
 model Category {
@@ -26,6 +26,7 @@ model Medicine {
   description String?  @db.Text
   price       Float
   stock       Int      @default(0)
+  imageUrl    String   // Added image URL
   expiryDate  DateTime
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])

@@ -38,6 +38,7 @@ async function main() {
       description: 'Standard pain relief and fever reduction',
       price: 5.99,
       stock: 100,
+      imageUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=600&auto=format&fit=crop',
       expiryDate: new Date('2026-12-31'),
       categoryId: categories.find(c => c.name === 'Painkillers')?.id || categories[0].id,
     },
@@ -46,6 +47,7 @@ async function main() {
       description: 'Antibiotic for bacterial infections',
       price: 12.50,
       stock: 50,
+      imageUrl: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=600&auto=format&fit=crop',
       expiryDate: new Date('2025-06-30'),
       categoryId: categories.find(c => c.name === 'Antibiotics')?.id || categories[0].id,
     },
@@ -54,6 +56,7 @@ async function main() {
       description: 'Immune system support',
       price: 8.99,
       stock: 200,
+      imageUrl: 'https://images.unsplash.com/photo-1550572017-edb475fb1454?q=80&w=600&auto=format&fit=crop',
       expiryDate: new Date('2027-01-15'),
       categoryId: categories.find(c => c.name === 'Vitamins')?.id || categories[0].id,
     }
