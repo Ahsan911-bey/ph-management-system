@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏥 Pharmacy Management System (E-Commerce)
 
-## Getting Started
+A full-stack, production-ready Pharmacy E-Commerce Storefront and Admin Dashboard. This project was built to demonstrate robust Database Systems principles, including complex relational mapping, strict CRUD operations, and transaction-safe order processing.
 
-First, run the development server:
+![Pharmacy Dashboard Mockup](https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=1200&auto=format&fit=crop) *(Example aesthetics)*
 
+## ✨ Features
+
+### 🛍️ Public E-Commerce Storefront
+- **Modern UI**: A clean, medical-themed interface using Tailwind CSS and Lucide Icons.
+- **Product Catalog**: Browse medicines by category or search. Real-time stock indicators.
+- **Dynamic Shopping Cart**: Client-side persistent cart using React Context and `localStorage`.
+- **Secure Checkout Flow**: Processes orders securely via Prisma `$transaction` to ensure database integrity (verifies live prices, prevents ordering out-of-stock items, and atomically decrements inventory).
+- **Custom Authentication**: Cookie-based server-side session management (built strictly without NextAuth or JWTs for transparency and simplicity).
+
+### 🛡️ Secure Admin Dashboard
+- **Dashboard Analytics**: Real-time aggregated statistics (total revenue, low-stock warnings, total orders).
+- **Medicines CRUD**: Full capability to Create, Read, Update, and Delete products with image URLs.
+- **Categories CRUD**: Manage nested categories and relationships.
+- **Order Management**: View detailed historical orders, track customer spending, and mark orders as "Completed" (safely deleting them).
+- **Customer Tracking**: View lifetime value and order histories for registered users.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Server Actions, Server Components)
+- **Database**: [MySQL 8](https://www.mysql.com/) (Running safely via Docker)
+- **ORM**: [Prisma](https://www.prisma.io/) (Schema modeling, migrations, seeding, transactions)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to get a local copy up and running.
+
+### 1. Prerequisites
+Ensure you have the following installed on your local machine:
+- [Node.js](https://nodejs.org/) (v18.x or higher)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Must be running)
+
+### 2. Installation & Setup
+
+**Clone the repository:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repo-url>
+cd ph-management-system
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Install dependencies:**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Database Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Start the MySQL Database via Docker Compose:**
+```bash
+# This will pull MySQL 8 and start the database container in the background
+docker compose up -d
+```
 
-## Learn More
+**Configure Environment Variables:**
+Ensure you have a `.env` file in the root directory. It should point to the Docker database:
+```env
+DATABASE_URL="mysql://root:root@localhost:3306/pharmacy"
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Prisma ORM Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Sync the Prisma schema to the newly created database:
+```bash
+npx prisma db push
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Populate the database with default categories, medicines, and the Admin user:
+```bash
+npx prisma db seed
+```
 
-## Deploy on Vercel
+### 5. Run the Application
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Start the Next.js development server:
+```bash
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The application is now running at: **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## 🔐 Default Credentials
+
+The `prisma/seed.ts` script automatically creates an admin account for you. 
+Navigate to `http://localhost:3000/login` to access the Admin Dashboard.
+
+- **Username**: `admin`
+- **Password**: `admin123`
+
+---
+
+## 🏗️ Architecture & Database Notes
+
+- **Transactions**: The checkout process uses `prisma.$transaction`. If a user attempts to buy a medicine but the stock decrement fails, the entire order is rolled back safely.
+- **Cascading Deletes**: To maintain referential integrity, deleting a `Sale` (marking an order as completed) automatically cascades and deletes the associated `SaleItem` records. However, deleting a `Medicine` is restricted if it is actively linked to an existing order.
+- **Auth Flow**: Uses HTTP-Only cookies to store session roles. The `middleware.ts` intercepts all requests to `/admin`, `/checkout`, and `/orders` to prevent unauthorized access, allowing seamless redirects to the login page via `callbackUrl`.
+
+---
+*Built as a Database Systems University Project.*
