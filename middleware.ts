@@ -17,14 +17,18 @@ export function middleware(request: NextRequest) {
   // Protect Admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/login', request.url));
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
     }
   }
 
   // Protect User orders/checkout routes (example)
   if (request.nextUrl.pathname.startsWith('/orders') || request.nextUrl.pathname.startsWith('/checkout')) {
     if (!role) {
-      return NextResponse.redirect(new URL('/login', request.url));
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
     }
   }
 

@@ -1,13 +1,17 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, Suspense } from 'react';
 import { loginAction } from '@/app/actions/auth';
 import Link from 'next/link';
 import { HeartPulse } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 const initialState = { error: '' };
 
-export default function LoginPage() {
+function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '';
+
   const [state, formAction, isPending] = useActionState(
     async (prevState: any, formData: FormData) => {
       const result = await loginAction(formData);
@@ -34,6 +38,7 @@ export default function LoginPage() {
         )}
 
         <form action={formAction} className="space-y-4">
+          <input type="hidden" name="callbackUrl" value={callbackUrl} />
           <div>
             <label className="block text-sm font-medium text-gray-700">Username</label>
             <input 
@@ -63,11 +68,19 @@ export default function LoginPage() {
 
         <div className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{' '}
-          <Link href="/register" className="text-green-600 hover:underline font-medium">
+          <Link href={`/register${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`} className="text-green-600 hover:underline font-medium">
             Register here
           </Link>
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
 }

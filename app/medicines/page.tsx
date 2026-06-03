@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import { AddToCartButton } from '@/components/AddToCartButton';
 
 export default async function MedicinesPage({
   searchParams,
@@ -88,12 +89,7 @@ export default async function MedicinesPage({
                             <p className="text-xs text-red-600 mt-0.5">Out of stock</p>
                           )}
                         </div>
-                        <button 
-                          disabled={med.stock <= 0}
-                          className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          Add
-                        </button>
+                        <AddToCartButton medicine={med} />
                       </div>
                     </div>
                   </Link>

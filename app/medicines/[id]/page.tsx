@@ -1,7 +1,8 @@
 import prisma from '@/lib/prisma';
 import { notFound } from 'next/navigation';
-import { ShoppingCart, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { ShieldCheck, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { AddToCartButton } from '@/components/AddToCartButton';
 
 export default async function MedicineDetailPage({
   params,
@@ -70,13 +71,7 @@ export default async function MedicineDetailPage({
               </div>
 
               <div className="flex gap-4">
-                <button 
-                  disabled={medicine.stock <= 0}
-                  className="flex-1 flex items-center justify-center gap-2 bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
-                >
-                  <ShoppingCart size={24} />
-                  Add to Cart
-                </button>
+                <AddToCartButton medicine={medicine} large />
               </div>
             </div>
           </div>

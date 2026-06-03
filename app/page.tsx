@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { ArrowRight, ShieldCheck, Truck, Clock } from 'lucide-react';
+import { AddToCartIconBtn } from '@/components/AddToCartButton';
 
 export default async function HomePage() {
   // Fetch some featured medicines
@@ -113,9 +114,7 @@ export default async function HomePage() {
                   
                   <div className="mt-4 flex items-center justify-between">
                     <span className="text-xl font-bold text-gray-900">${med.price.toFixed(2)}</span>
-                    <button className="w-10 h-10 bg-green-50 text-green-600 rounded-full flex items-center justify-center hover:bg-green-500 hover:text-white transition">
-                      +
-                    </button>
+                    <AddToCartIconBtn medicine={med} />
                   </div>
                 </div>
               </Link>

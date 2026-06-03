@@ -7,6 +7,7 @@ import { setSession, clearSession } from '@/lib/auth';
 export async function loginAction(formData: FormData) {
   const username = formData.get('username') as string;
   const password = formData.get('password') as string;
+  const callbackUrl = formData.get('callbackUrl') as string;
 
   if (!username || !password) {
     return { error: 'Username and password are required' };
@@ -27,8 +28,10 @@ export async function loginAction(formData: FormData) {
     role: user.role,
   });
 
-  // Redirect based on role
-  if (user.role === 'ADMIN') {
+  // Redirect based on role and callback
+  if (callbackUrl) {
+    redirect(callbackUrl);
+  } else if (user.role === 'ADMIN') {
     redirect('/admin/dashboard');
   } else {
     redirect('/');
@@ -38,6 +41,7 @@ export async function loginAction(formData: FormData) {
 export async function registerAction(formData: FormData) {
   const username = formData.get('username') as string;
   const password = formData.get('password') as string;
+  const callbackUrl = formData.get('callbackUrl') as string;
 
   if (!username || !password) {
     return { error: 'Username and password are required' };
@@ -66,7 +70,11 @@ export async function registerAction(formData: FormData) {
     role: user.role,
   });
 
-  redirect('/');
+  if (callbackUrl) {
+    redirect(callbackUrl);
+  } else {
+    redirect('/');
+  }
 }
 
 export async function logoutAction() {

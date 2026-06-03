@@ -1,5 +1,7 @@
 import prisma from '@/lib/prisma';
 import { Eye } from 'lucide-react';
+import Link from 'next/link';
+import { CompleteOrderButton } from '@/components/CompleteOrderButton';
 
 export default async function AdminOrdersPage() {
   const sales = await prisma.sale.findMany({
@@ -45,9 +47,12 @@ export default async function AdminOrdersPage() {
                     ${sale.totalAmount.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className="p-2 text-blue-600 hover:bg-blue-50 rounded transition flex items-center gap-1 inline-flex">
-                      <Eye size={18} /> View
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <Link href={`/admin/orders/${sale.id}`} className="p-2 text-blue-600 hover:bg-blue-50 rounded transition flex items-center gap-1">
+                        <Eye size={18} /> <span className="hidden sm:inline">View</span>
+                      </Link>
+                      <CompleteOrderButton id={sale.id} />
+                    </div>
                   </td>
                 </tr>
               ))}

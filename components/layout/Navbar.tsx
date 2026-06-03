@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { HeartPulse, Search, ShoppingCart, User as UserIcon } from 'lucide-react';
+import { HeartPulse, Search, User as UserIcon } from 'lucide-react';
 import { getSession } from '@/lib/auth';
 import { logoutAction } from '@/app/actions/auth';
+import { CartIcon } from '@/components/layout/CartIcon';
 
 export default async function Navbar() {
   const session = await getSession();
@@ -34,12 +35,7 @@ export default async function Navbar() {
               Products
             </Link>
             
-            <Link href="/cart" className="relative text-gray-600 hover:text-green-600 transition">
-              <ShoppingCart size={24} />
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                0
-              </span>
-            </Link>
+            <CartIcon />
 
             {session ? (
               <div className="flex items-center gap-4">
